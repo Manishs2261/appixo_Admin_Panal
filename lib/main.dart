@@ -1,4 +1,5 @@
- import 'package:appixoadmin/src/screen/home/home.dart';
+ import 'package:appixoadmin/src/screen/auth/login.dart';
+import 'package:appixoadmin/src/screen/home/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home(),
+      home: LoginScreen(),
     );
   }
 }
