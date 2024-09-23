@@ -23,6 +23,10 @@ dependencies:
   another_flushbar: ^1.12.30
   sidebarx: ^0.17.1
   getwidget: ^4.0.0
+  firebase_storage: ^12.3.1
+  cloud_firestore: ^5.4.2
+  firebase_core: ^3.5.0
+
 
 
 

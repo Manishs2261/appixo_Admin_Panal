@@ -1,5 +1,13 @@
 import 'package:appixoadmin/src/components/custome_icon_button.dart';
+import 'package:appixoadmin/src/data/repository/api.dart';
+import 'package:appixoadmin/src/screen/home/widgets/dashboard_screen.dart';
+import 'package:appixoadmin/src/screen/home/widgets/desls_screen.dart';
+import 'package:appixoadmin/src/screen/home/widgets/foods_screen.dart';
+import 'package:appixoadmin/src/screen/home/widgets/reports_screen.dart';
+import 'package:appixoadmin/src/screen/home/widgets/rooms_screen.dart';
+import 'package:appixoadmin/src/screen/home/widgets/users_screen.dart';
 import 'package:flutter/material.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,53 +18,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Define a variable to keep track of the selected screen
-  String selectedScreen = "Dashboard";
+  String selectedScreen = "Rooms";
 
   // Method to display the selected screen widget
   Widget _buildContent() {
     switch (selectedScreen) {
       case "Dashboard":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.white,
-          child: Center(child: Text('Dashboard Content')),
-        );
+        return DashboardScreen();
       case "Users":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.blue,
-          child: Center(child: Text('Users Content')),
-        );
+        return UsersScreen();
       case "Rooms":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.green,
-          child: Center(child: Text('Rooms Content')),
-        );
+        return RoomsScreen();
       case "Foods":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.green,
-          child: Center(child: Text('Foods Content')),
-        );
+        return FoodsScreen();
       case "Deals":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.green,
-          child: Center(child: Text('Deals Content')),
-        );
+        return  DealsScreen();
       case "Reports":
-        return Container(
-          width: 200,
-          height: 100,
-          color: Colors.green,
-          child: Center(child: Text('Reports Content')),
-        );
+        return ReportsScreen();
       default:
         return Container(
           width: 200,
@@ -69,6 +47,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    ApiClass.getUserCount();
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
         double width = constraints.maxWidth;
@@ -86,7 +65,7 @@ class _HomeState extends State<Home> {
                     height: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      border: Border.all(width: 2, color: Colors.grey.shade50),
+                      border: Border.all(color: Colors.grey.withOpacity(0.4)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +184,10 @@ class _HomeState extends State<Home> {
                         Container(
                           width: double.infinity,
                           height: 50,
-                          decoration: BoxDecoration(color: Colors.white),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(0.4)),
+                              color: Colors.white),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -245,3 +227,10 @@ class _HomeState extends State<Home> {
     ));
   }
 }
+
+
+
+
+
+
+
