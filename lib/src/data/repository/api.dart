@@ -3,13 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ApiClass{
 
 
+
+
+
  static Future<int> getUserCount() async {
     try {
       // Replace 'users' with the name of your Firestore collection
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('loginUser').get();
 
       // Return the total number of documents (users)
-      print(querySnapshot.size);
+      int userCount = querySnapshot.size;
+      print(querySnapshot.docs.length);
+      print(userCount);
       return querySnapshot.size;
 
     } catch (e) {
