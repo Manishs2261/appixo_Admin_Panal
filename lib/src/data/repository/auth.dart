@@ -9,16 +9,32 @@ class AuthClass{
   static FirebaseAuth auth = FirebaseAuth.instance;
 
 
-  Future<void> saveLoginToken(String token) async {
+ static Future<void> saveLoginToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
   }
 
 
 
-  Future<String?> getLoginToken() async {
+ static Future<String?> getLoginToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
+  }
+
+
+
+  // Check if the user is logged in (token exists)
+  static  Future<bool> isUserLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+    return token != null; // If token exists, return true, otherwise false
+  }
+
+
+  // Clear the login token on logout
+  static Future<void> clearToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
   }
 
 
@@ -27,6 +43,7 @@ class AuthClass{
   static Future<bool> loginEmailAndPassword(String email, String pass) async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pass);
+      AuthClass.saveLoginToken("sjfnskkdsjfsnkfjankjafkf#!@%fs54656a" + email);
 
       if( credential.user!.emailVerified)
       {

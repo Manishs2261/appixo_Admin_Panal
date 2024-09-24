@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
                               border: Border.all(
                                   color: Colors.grey.withOpacity(0.4)),
                               color: Colors.white),
-                          child: Row(
+                          child:   Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Padding(
@@ -203,15 +203,70 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8, bottom: 5, right: 24),
+                                padding: const EdgeInsets.only(top: 8, bottom: 5, right: 8),
                                 child: Text(
                                   "Manish Sahu",
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ),
+                              StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  bool isDropdownOpen = false;
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: PopupMenuButton<String>(
+                                      onSelected: (value) {
+                                        if (value == 'logout') {
+                                          // Implement your logout logic here
+                                          print("User selected Logout");
+                                        }
+                                      },
+                                      onCanceled: () {
+                                        setState(() {
+                                          isDropdownOpen = false;
+                                        });
+                                      },
+                                      onOpened: () {
+                                        setState(() {
+                                          isDropdownOpen = true;
+                                        });
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return [
+                                          PopupMenuItem<String>(
+                                            value: 'logout',
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.logout, color: Colors.black),
+                                                SizedBox(width: 8),
+                                                Text('Logout'),
+                                              ],
+                                            ),
+                                          ),
+                                        ];
+                                      },
+                                      // Animated rotation of the icon
+                                      child: AnimatedRotation(
+                                        turns: isDropdownOpen ? 0.5 : 0.0, // Rotate 180 degrees when open
+                                        duration: Duration(milliseconds: 200), // Duration of the animation
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      // Positioning the menu below the app bar
+                                      offset: Offset(0, AppBar().preferredSize.height),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
-                          ),
+                          )
+
+
+
+
                         ),
                         _buildContent(),
                         // Display the selected screen's content here

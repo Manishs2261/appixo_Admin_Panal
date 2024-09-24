@@ -1,25 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ApiClass{
+class ApiClass {
 
 
-
-
-
- static Future<int> getUserCount() async {
+  static Future<int> getUserCount() async {
     try {
-      // Replace 'users' with the name of your Firestore collection
+      // Fetch the collection snapshot
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('loginUser').get();
 
-      // Return the total number of documents (users)
+      // Check if the snapshot is empty
+      if (querySnapshot.docs.isEmpty) {
+        print("No documents found in the 'loginUser' collection.");
+      } else {
+        print("Found documents in 'loginUser': ${querySnapshot.docs.length}");
+      }
+
+      // Get the total number of documents
       int userCount = querySnapshot.size;
-      print(querySnapshot.docs.length);
-      print(userCount);
-      return querySnapshot.size;
+      print("Total number of users: $userCount");
+
+      return userCount;
 
     } catch (e) {
       print("Error fetching user count: $e");
-      return 0; // Return 0 in case of an error
+      return 0; // Return 0 if an error occurs
     }
   }
+
+
+
+
 }
