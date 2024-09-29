@@ -5,19 +5,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-import 'firebase_options.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDLHX6XJrSU_ulc5YWwMPDje-wq2c8T0SQ",
+          authDomain: "appixo.firebaseapp.com",
+          projectId: "appixo",
+          storageBucket: "appixo.appspot.com",
+          messagingSenderId: "1012069754938",
+          appId: "1:1012069754938:web:55d9d6e0711159538bad03",
+          measurementId: "G-DWWVEHEWZ1"));
 
   // Check if token exists
   bool isLoggedIn = await AuthClass.isUserLoggedIn();
 
-  runApp( MyApp(isLoggedIn: isLoggedIn));
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {

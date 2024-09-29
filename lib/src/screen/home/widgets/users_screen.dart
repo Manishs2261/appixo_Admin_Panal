@@ -1,83 +1,379 @@
-import 'package:flutter/cupertino.dart';
+import 'package:appixoadmin/src/utils/Constants/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class UsersScreen extends StatelessWidget {
-  const UsersScreen({
-    super.key,
-  });
+class UsersScreen extends StatefulWidget {
+  UsersScreen({super.key});
+
+  @override
+  State<UsersScreen> createState() => _UsersScreenState();
+}
+
+class _UsersScreenState extends State<UsersScreen> {
+  var snapData;
+
+  bool isSwitched = false;
+  int currentPage = 0; // Track current page
+  final int itemsPerPage = 7; // 5 items per page
+
+  // Controller for search input
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = ''; // Store the search query
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: Offset(1, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                // Profile Picture
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50), // Circular image
-                  child: Image.network(
-                    'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAlAMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAACAAEDBQYEB//EADkQAAEDAgQEAwUHAgcAAAAAAAEAAgMEEQUSITEGE0FRImFxFDJSgZEVIzNCocHw0eEHJDVicrHx/8QAGgEAAgMBAQAAAAAAAAAAAAAAAQIAAwQFBv/EACQRAAICAgICAgIDAAAAAAAAAAABAhEDEgQhMVEiQQUTM2GB/9oADAMBAAIRAxEAPwDM+zRfCE4pYvhCfJ6og09yvM7P2djUH2SL4QmNFCfyqXKe5St6obS9k1RAaCLshOHxrose5TEHuUVOXsmqOY4fEm+z4l06prlHeXsmqOb7OiTHD4/4V03chu5NvP2DRHKcPjQmgjXUS66AlyZTl7Bqjn9ijRexRKS5SBN0dpewaoj9ii6hMaOHsp7uTG6m8vYNUcxo4fhCB1HF8IXQ66AtKZSl7F1Rzmkh+EJKUg3ST7P2DVF3ZLKpLJWXOs0gBqfKjslZSyEeVMWqWya2ilksiLUJbp/VQVeJ01KQJHkk/CLrOYnjE0jzlfy2HwgAa27rZg4uTL9dFOTPGBa1mMU9PcM8bxfQLj+2/uZHWDnXs0W/7WXfK8P8dzr1U0dQACNwfJdWHCxRRjfIk3ZpafGGPBzEKaDFIZGNLtCVkoH2JvqTt9P/ABdkMjSRr1sAi+HiZFnmjYABwzNsQmyqqoq0xMazMHaBXDS14BabghcvPglif9GuGRSAypiFJZCQqLGIyEBapiEBCZMBEQkjITprAW9krI7JwFhsvBsllR2T2QsJEdBc2+azONYqHZ2wvPKD8t+ju+qteI6t1LQuEZtI/QehWJkzOY2EElxF9e67H4/jWv2SMfJy18UNLVyNlcA8kWvc6qN7hNexvoCueWKRps/S3Y30SiZL+RpIPVdf6MVNhNd0d6J3QggujB03F076eTQlvmkOYwAWPkomg6sia/K4EI2ZnOuD6KR9LNM0Py6nsmmiliAZkdYb6KbImjJYZJw45NSDqQtFhNS502Um4yBZiJzr2Y0+avsKjLTGAdbm/mVXmgpQaY0G1I0ZF9UxCJtiwEdk9l519HQoiIQkKYhA4IpgIrJkRTJgF1ZOAiAT2WGzQDZPZFZPZCyGZ4nbnlYCNGtvqsvVsZIQ7UEG2y1nFV/uWs987+l1maoOdzCBYEWBXqeF3gicvP8AyMeipBWuayBjnaAOJWkpuH8rWgxn6KXgKh+8bK8DxLbV8QiaMoCOSXZfigqPParCjHfwqGgwkVL7OjdYHU2WmrWukcQG+iDD2yxzMGU2J1Co2aNUcaY0OCQsiIMevQKOpwOBga5zQSdNQrqoMkbg7LoV2w0oqovvLNI6kqbMfVfZ57j+BGkidWRsJYwjMG9io+HWc7M/MRy9x0N/5+i9ROFx1uEVdG6z7xOs4WNivNuH2OY6Zjs1766WBVsptYpMw5Ix/YqLW2gHZMpCEBXAuzSAUDgpLISEyYCEjVJGQnTWKXNk4CcIgFgs0DAJWRWSshYSg4lY08s5fEfDdZea5fkAu0LZ8RU75KPmsFzCbkAbgrIRxyZy6Rj2ZiS0OaQSO+q9P+OmpcdL0c3kRayWbv8Aw+pjMTJlPKZor/jCrhwuh5z2Znu8METd3uXL/ho9pwWZuXxMks76Lv4rMfLbKYWySMaRGC3Yp5tJl0O49HmklfxG8mVtJExvY7/RdGE47icdQ0VtDnF/fZ0R41FiEfscvMLWyyZZIhGczW/F2t5LpxKjhpMQi+z5XTQutmcRs7t5hRpV4Q0W0/s1bZ4a2HMBoACb9Fk+Ip8UlquXFXMpaUus0D3itFTwFksbtWxy+AhZjibBauTEmODiAx9jvtfUfNV43UjRkTcLRZ8JUFbBi0FRRYpK+ZvvwyCzXjqCN1BFTmGepBFrSOFu2v8AdaThPDYjLT1EZdE6jEbHAH8Y2sXHt6DdcWOwCnxetib7omcfrr+6q5mRxw1fkz6LZOiqcEBClcgK5BaRoSjO6EpkKRndJI7pJgF4AiQhEFhNA4CeyQToEChbmlYDrcjToqmoqKSrwiOrxZxdKZ5GPdbUZTsPRWzTYgjcdlw4phBroWsgcyMmfmNzaMDj7wPYHddHgZEriyUmu0XvBFLHTvro6eTPFI5j2X6i26tsUo3uOdgHh79VQ4BUz0OIxisiDPDyiWnwmx3C1lWc7Lgg37LsS7VmePToxWJwe0Pu9moPfZc9NHCyVnMaOw9Ve4nGGtvsVR4nGRNRvZqGSZngdQqk3ZfS1NA5kc1I5sbm3j8R8rLoqYG1NPDVlt/BaU9ispi/EMjMSaGSww0ztDHlu5/7BdNFj7KjEvZhWGKGNhbySBle49bpnFkjKPs0dI6OnI5IAzEXsqji5gGMyOA/EjY8+trfsuqlP+YYy9xm3uoeMf8AWCL+7CwH+fNZOV3i/wBBkSTVGdcEBClcoyuamIRkKMqUqNwToUiO6SchJOAvGowmCJc80CsnCSIIEGspGPMZzNANtwdj5IEQRjJxaaIRMr24u+R0cJp2Uz8jmkg6kX/ZXWG1zzGIpXXc0LK00D6WuxJrGvcyaFs7Gt+Ju/6FdFBXBkZkLhd+1zsvUwanjTiZFJ7dl/itnx3B0WHxfFJ2zmGC9xpfstRPWNfEcrg4W6LLchlVVT5rZXbgqRSXbLZNtUiqbhz5phNU1Db3B0NyraLCKR7nPBqMwFy8NJt9Auwubh9MBFEC1m2UBTYLi1RWSvYaXKyxu4qxz6BDHG6fkXCNbJ9q+zzve9m7S9tjorLHp/aMTqJD3DfkBZQMbHS4lFU5W5Q0jfUnoopnF7i5251K53Omv1pew97V6OdyAqQoCuYgkZQFSFCU6YKISNUk5GqSexS8CdMEQWA0DhOAmCIJWQQRBIKVkEsgvHG5w7gIqLl4IPRC1bE7TS49dFnuJ8Nnop3zUwcYCbuA3atC6OWK5LHDTfsVV4piLnRkTNLHjS9jYr0H4644eyjJC2ZmPFuW37uTS1iCpqHEoS8ucLEriqYYJ5CWjIe7dFAMMkJ8MunkuhcGVazTL2bE2g5RlsmhxdrHuEZAvv2VP9lVLz+Lf1Wi4a4RFbU5qlxMbBdwBtfySvWhrn5JaaR1bllePDHcD/cVO9TFjYhkYA1rdABsFA9ef5GZ5cllsV0RFCUZQFVILAKBxRlRuKdCgE6pJjuknFLsIkIRLCaAgjCAK5wfCXVLW1EpLYr+Fo9539k0McsktYkJ8IwqxE9W0WtdkZ6+ZU1fP+RswiaNLNGy662TltOZ7GC2gJVNPUsJsZWH5rsQxRxxqKNOKH2VdZG57jkxGYn1b+wXAWStBEjzKzrmVvK6N+7WrlfBG73S5vmDcKy2jUoIoKnDqaYkx/dP/QqJlG+KzX3HY9D81oPZiRu136IcnK/EZ4OoIuE6ytCT4sZdryVcUBJ8Oq13DrORTSSPIHh1HdVlLRXcJqaNz4r2LbXt/VWs9qehqXt0Ahdv3srFK+zFkhr0VGIQciVrmjwStEjRe9r9PquFyu66DnUFK2J+ealpmmZnkdbhUrlxc0NJtFclTIigKNyjckRWwCgKMqMqxAAO6SR3STCl2EXRJJYmaDrw6FlRVxxyXyuOtuqu8VrJ6OGCKnfka8hmn5RtokkujwV8Wy3H2uwqjDqYFjXtMpc0Pc6Q3Lj5rmfQ0o0EEY9GhJJbZF8G6Rwz0VOL5WZf+Jsq6aLli7JHjyukklNUTjbVSh+W9xe2q6faZBIBfS2ySSZeRmaese6ik5cLjYMadfRVVVic0zTFKyJ7H6ODm7i6SSkumZ4JPGmy9ipoYzG8RguqXtgkv1Ztb9VksVp2UuITwR3LGPIGbdMks/LS0s5+V/M43KNySSwIrZG5RlJJWIQjO6SSScB//9k=',
-                    // Replace with actual photo URL
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
+    return Column(
+      children: [
+        // Search Bar
+        Align(
+          alignment: Alignment.topRight,
+          child: SizedBox(
+            width: 400,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery =
+                        value.toLowerCase(); // Update search query on change
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Search by Name or Email',
+                  suffixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                SizedBox(width: 16), // Space between image and text
-
-                // Profile Information (Name, Email, City)
-
-                Text(
-                  'John Doe', // Name
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(width: 16),
-                // Email
-                Text(
-                  'john.doe@example.com', // Email
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                  ),
-                ),
-                SizedBox(width: 16),
-                // City
-
-                Text(
-                  'New York City', // City
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                  ),
-                ),
-
-                SizedBox(width: 16),
-
-                Icon(Icons.delete)
-              ],
+              ),
             ),
           ),
-        ));
+        ),
+        Expanded(
+          child: StreamBuilder(
+            stream:
+                FirebaseFirestore.instance.collection('loginUser').snapshots(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                case ConnectionState.none:
+                  return const Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.signal_wifi_connected_no_internet_4),
+                        SizedBox(width: 8),
+                        Text("No Internet Connection"),
+                      ],
+                    ),
+                  );
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+
+                  // Handle null or empty data
+                  if (data == null || data.isEmpty) {
+                    return const Center(child: Text('No data available'));
+                  }
+
+                  // Filter data based on search query (name or email)
+                  var filteredData = data.where((doc) {
+                    var userData = doc.data();
+                    var name = userData['Name']?.toLowerCase() ?? '';
+                    var email = userData['email']?.toLowerCase() ?? '';
+                    return name.contains(searchQuery) ||
+                        email.contains(searchQuery);
+                  }).toList();
+
+                  // Calculate the start and end indices for the current page
+                  int startIndex = currentPage * itemsPerPage;
+                  int endIndex =
+                      (startIndex + itemsPerPage < filteredData.length)
+                          ? startIndex + itemsPerPage
+                          : filteredData.length;
+
+                  var currentData = filteredData.sublist(
+                      startIndex, endIndex); // Paginated data
+
+                  // Calculate the display range for the pagination summary
+                  int showingFrom = startIndex + 1;
+                  int showingTo = endIndex;
+                  int totalResults = filteredData.length;
+
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: currentData.length,
+                          itemBuilder: (_, index) {
+                            var userData = currentData[index].data();
+
+                            // Extract user details from Firestore
+                            var name = userData['Name'] ?? 'Unknown Name';
+                            var email = userData['email'] ?? 'Unknown Email';
+                            var city = userData['city'] ?? 'Unknown City';
+                            var profilePic =
+                                userData['userImage'] ?? 'default_image_url';
+
+                            int serialNumber = startIndex + index + 1;
+
+                            // Handle timestamp conversion
+                            var timestamp = userData['createdAt'] as Timestamp?;
+                            DateTime? dateTime;
+                            if (timestamp != null) {
+                              dateTime = timestamp.toDate();
+                            }
+
+                            return Container(
+                              child: Card(
+                                margin: const EdgeInsets.all(1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: (index % 2 == 0)
+                                        ? Colors.white
+                                        : Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(6),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        blurRadius: 1,
+                                        offset: const Offset(1, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+
+                                      // Serial Number
+                                      Container(
+                                        width: 30,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '$serialNumber',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      // Profile Picture
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: CachedNetworkImage(
+                                          imageUrl: profilePic,
+                                          height: 40,
+                                          width: 40,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.person),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      // Space between image and text
+
+                                      // Profile Information (Name, Email, City)
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              name, // Name
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                            Text(
+                                              email, // Email
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            Text(
+                                              city, // City
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            if (dateTime !=
+                                                null) // If `Timestamp` field exists
+                                              Text(
+                                                'Joined: ${dateTime.toLocal().toString()}',
+                                                // Display DateTime
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Column(
+                                        children: [
+                                          Text("Rooms"),
+                                          Text("200"),
+                                          Text(
+                                            "View",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text("Foods"),
+                                          Text("200"),
+                                          Text(
+                                            "View",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text("Deals"),
+                                          Text("200"),
+                                          Text(
+                                            "View",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        // Aligns the row content in the center
+                                        children: [
+                                          Text(
+                                            isSwitched ? 'Active' : 'Inactive',
+                                            // Changes the text based on switch value
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: isSwitched
+                                                    ? Colors.green
+                                                    : Colors
+                                                        .red), // Customize the text style
+                                          ),
+                                          SizedBox(width: 10),
+                                          // Adds some spacing between the text and switch
+                                          Transform.scale(
+                                            scale: 0.75,
+                                            // Scales the switch size (optional)
+                                            child: Switch(
+                                              value: isSwitched,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  isSwitched = value;
+                                                });
+                                              },
+                                              activeColor: Colors.green,
+                                              // Active thumb color
+                                              inactiveThumbColor: Colors.red,
+                                              // Inactive thumb color
+                                              activeTrackColor:
+                                                  Colors.green.withOpacity(0.5),
+                                              inactiveTrackColor:
+                                                  Colors.red.withOpacity(0.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () {
+                                          // Add functionality to handle delete, if required
+                                          // Example: deleteUser(userData['uid']);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      // Pagination controls
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // Pagination summary (Showing X to Y of Z results)
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Showing $showingFrom to $showingTo of $totalResults results",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary,foregroundColor: Colors.white),
+
+                              onPressed: currentPage > 0
+                                  ? () {
+                                      setState(() {
+                                        currentPage--;
+                                      });
+                                    }
+                                  : null, // Disable if on the first page
+                              child: const Text('Previous'),
+                            ),
+                            const SizedBox(width: 16),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary,foregroundColor: Colors.white),
+                              onPressed: endIndex < filteredData.length
+                                  ? () {
+                                      setState(() {
+                                        currentPage++;
+                                      });
+                                    }
+                                  : null, // Disable if on the last page
+                              child: const Text('Next'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

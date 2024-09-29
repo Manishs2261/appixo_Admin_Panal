@@ -80,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     // Email Field
                                     TextFormField(
+
                                       controller: emailController,
                                       decoration: InputDecoration(
                                         isDense: true,

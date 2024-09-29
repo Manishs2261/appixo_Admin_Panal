@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Define a variable to keep track of the selected screen
-  String selectedScreen = "Rooms";
+  String selectedScreen = "Users";
 
   // Method to display the selected screen widget
   Widget _buildContent() {
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    ApiClass.getUserCount();
+
     return Scaffold(body: LayoutBuilder(
       builder: (context, constraints) {
         double width = constraints.maxWidth;
@@ -268,7 +268,7 @@ class _HomeState extends State<Home> {
 
 
                         ),
-                        _buildContent(),
+                        Expanded(child: _buildContent()),
                         // Display the selected screen's content here
                       ],
                     ),
