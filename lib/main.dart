@@ -1,7 +1,10 @@
-import 'package:appixoadmin/src/data/repository/auth.dart';
-import 'package:appixoadmin/src/screen/auth/login.dart';
-import 'package:appixoadmin/src/screen/home/home.dart';
+
+
+import 'package:ad/src/data/repository/auth.dart';
+import 'package:ad/src/screen/auth/login.dart';
+import 'package:ad/src/screen/home/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 

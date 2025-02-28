@@ -1,12 +1,13 @@
-import 'package:appixoadmin/src/components/custome_icon_button.dart';
-import 'package:appixoadmin/src/data/repository/api.dart';
-import 'package:appixoadmin/src/screen/home/widgets/dashboard_screen.dart';
-import 'package:appixoadmin/src/screen/home/widgets/desls_screen.dart';
-import 'package:appixoadmin/src/screen/home/widgets/foods_screen.dart';
-import 'package:appixoadmin/src/screen/home/widgets/reports_screen.dart';
-import 'package:appixoadmin/src/screen/home/widgets/rooms_screen.dart';
-import 'package:appixoadmin/src/screen/home/widgets/users_screen.dart';
+
+import 'package:ad/src/screen/home/widgets/dashboard_screen.dart';
+import 'package:ad/src/screen/home/widgets/desls_screen.dart';
+import 'package:ad/src/screen/home/widgets/foods_screen.dart';
+import 'package:ad/src/screen/home/widgets/reports_screen.dart';
+import 'package:ad/src/screen/home/widgets/rooms_screen.dart';
+import 'package:ad/src/screen/home/widgets/users_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/custome_icon_button.dart';
 
 
 class Home extends StatefulWidget {
@@ -18,7 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Define a variable to keep track of the selected screen
-  String selectedScreen = "Users";
+  String selectedScreen = "Rooms";
 
   // Method to display the selected screen widget
   Widget _buildContent() {

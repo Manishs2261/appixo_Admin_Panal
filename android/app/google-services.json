@@ -1,0 +1,108 @@
+{
+  "project_info": {
+    "project_number": "1012069754938",
+    "project_id": "appixo",
+    "storage_bucket": "appixo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012069754938:android:5a13caaa264eb1c28bad03",
+        "android_client_info": {
+          "package_name": "com.example.manishsahu.appixo.admin.appixoadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012069754938-hibnp3nooaeg26l7ig31dvrh9f2aeldt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjESwnZAqWTwFP_U2KjnSfuF_T-hRc2pY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012069754938-hibnp3nooaeg26l7ig31dvrh9f2aeldt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012069754938:android:11444e136d3872b88bad03",
+        "android_client_info": {
+          "package_name": "com.manishsahu.myappixo.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012069754938-0gf90igbsfhcfpdbhj1l7bv7lhlm03oa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manishsahu.myappixo.app",
+            "certificate_hash": "e2df6c3f7464d00f749c687d4b5e0cbe968781e7"
+          }
+        },
+        {
+          "client_id": "1012069754938-7ko2o92iqq02p5il31mq8bhn2p79m831.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manishsahu.myappixo.app",
+            "certificate_hash": "454f95a4e4fe9adef0092827cffa3d4b4e6a1194"
+          }
+        },
+        {
+          "client_id": "1012069754938-8atcr3jrv5miufs1ia5g55k9itabgkkf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manishsahu.myappixo.app",
+            "certificate_hash": "474a7a9400d87b69e82bb89d8919be96d27ecdf5"
+          }
+        },
+        {
+          "client_id": "1012069754938-eniu77qbhogsbp230rvoofprun4jcvpo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manishsahu.myappixo.app",
+            "certificate_hash": "7ddf0c0d7022d0c383252d28d709772df591302f"
+          }
+        },
+        {
+          "client_id": "1012069754938-mv7k9ooao344ftlf3br4p0pr2sj0voq2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manishsahu.myappixo.app",
+            "certificate_hash": "b5dad71df6cd1b95242adc4c909c7191aa4041ef"
+          }
+        },
+        {
+          "client_id": "1012069754938-hibnp3nooaeg26l7ig31dvrh9f2aeldt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjESwnZAqWTwFP_U2KjnSfuF_T-hRc2pY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012069754938-hibnp3nooaeg26l7ig31dvrh9f2aeldt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

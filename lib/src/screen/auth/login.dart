@@ -1,8 +1,10 @@
-import 'package:appixoadmin/src/data/repository/auth.dart';
-import 'package:appixoadmin/src/screen/home/home.dart';
-import 'package:appixoadmin/src/utils/Constants/colors.dart';
-import 'package:appixoadmin/src/utils/validator/text_field_validator.dart';
+
 import 'package:flutter/material.dart';
+
+import '../../data/repository/auth.dart';
+import '../../utils/Constants/colors.dart';
+import '../../utils/validator/text_field_validator.dart';
+import '../home/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

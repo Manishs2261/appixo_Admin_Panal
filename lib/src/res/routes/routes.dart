@@ -1,8 +1,8 @@
-import 'package:appixoadmin/src/screen/auth/login.dart';
-import 'package:appixoadmin/src/screen/home/home.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
+  import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
+import '../../screen/auth/login.dart';
+import '../../screen/home/home.dart';
 import '../route_name/route_name.dart';
 
 class AppRoutes{

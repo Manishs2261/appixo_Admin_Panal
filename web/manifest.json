@@ -1,6 +1,6 @@
 {
-    "name": "appixoadmin",
-    "short_name": "appixoadmin",
+    "name": "ad",
+    "short_name": "ad",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
