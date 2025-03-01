@@ -49,6 +49,9 @@ dependencies:
   shared_preferences: ^2.3.2
   cached_network_image: ^3.4.1
   flutter_advanced_switch: ^3.1.0
+  fluent_ui: ^4.11.2
+  iconify_flutter: ^0.0.7
+
 
 dev_dependencies:
   flutter_test:

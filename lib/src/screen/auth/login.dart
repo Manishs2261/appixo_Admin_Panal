@@ -17,9 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // Create a global key that will uniquely identify the Form widget and allow validation.
   final _formKey = GlobalKey<FormState>();
 
-  final emailController = TextEditingController();
+  final emailController = TextEditingController(text: 'Manishsahu2609@gmail.com');
 
-  final passwordController = TextEditingController();
+  final passwordController = TextEditingController(text: '12345678');
 
   bool isLoading = false;
 

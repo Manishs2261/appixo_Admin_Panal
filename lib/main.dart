@@ -4,6 +4,7 @@ import 'package:ad/src/data/repository/auth.dart';
 import 'package:ad/src/screen/auth/login.dart';
 import 'package:ad/src/screen/home/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -35,12 +36,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return FluentApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: FluentThemeData(
+        brightness: Brightness.light,  // or Brightness.dark
       ),
       home: isLoggedIn ? Home() : LoginScreen(),
     );
