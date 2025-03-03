@@ -8,10 +8,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
 
   await Firebase.initializeApp(options: DefaultFirebaseConfig.currentPlatform);
 

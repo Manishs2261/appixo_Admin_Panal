@@ -19,8 +19,8 @@ class DefaultFirebaseConfig {
   static String environment = const String.fromEnvironment('ENV', defaultValue: 'dev');
 
   // Firestore Collection Names
-  static String get roomCollection => dotenv.env['ROOM_COLLECTION_${environment.toUpperCase()}'] ?? 'dev_CollectionRoom';
-  static String get foodCollection => dotenv.env['FOOD_COLLECTION_${environment.toUpperCase()}'] ?? 'dev_CollectionFood';
-  static String get sellAndBuyCollection => dotenv.env['SELL_AND_BUY_COLLECTION_${environment.toUpperCase()}'] ?? 'dev_CollectionSellAndBuy';
-  static String get servicesCollection => dotenv.env['SERVICES_COLLECTION_${environment.toUpperCase()}'] ?? 'dev_CollectionServices';
+  static String get roomCollection => dotenv.env['ROOM_COLLECTION_${environment.toUpperCase()}'] ?? 'DevRoomCollection';
+  static String get foodCollection => dotenv.env['FOOD_COLLECTION_${environment.toUpperCase()}'] ?? 'DevFoodCollection';
+  static String get sellAndBuyCollection => dotenv.env['SELL_AND_BUY_COLLECTION_${environment.toUpperCase()}'] ?? 'DevSellAndBuyCollection';
+  static String get servicesCollection => dotenv.env['SERVICES_COLLECTION_${environment.toUpperCase()}'] ?? 'DevServicesCollection';
 }

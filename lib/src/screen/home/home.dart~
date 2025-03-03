@@ -1,3 +1,4 @@
+import 'package:ad/src/screen/home/widgets/food_screen/foods_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class Home extends StatefulWidget {
@@ -23,14 +24,14 @@ class _HomeState extends State<Home> {
       ),
       PaneItemSeparator(),
       PaneItem(
-        icon: const Icon(FluentIcons.home),
+        icon: const Icon(FluentIcons.room),
         title: const Text('Rooms'),
         body: const Center(child: Text('Rooms')),
       ),
       PaneItem(
         icon: const Icon(FluentIcons.home),
         title: const Text('Foods'),
-        body: const Center(child: Text('foods')),
+        body: FoodsScreen(),
       ),
       PaneItem(
         icon: const Icon(FluentIcons.home),
